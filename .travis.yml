@@ -1,0 +1,13 @@
+language: go
+
+services:
+  - docker
+
+before_install:
+  - docker build --no-cache -t ${TRAVIS_REPO_SLUG}:${TRAVIS_COMMIT} .
+  - docker run ${TRAVIS_REPO_SLUG}:${TRAVIS_COMMIT} /go/src/github.com/testaccount-cb/whatismyip-go/whatismyip-go.test
+  - docker run -d -p 127.0.0.1:7000:8000 ${TRAVIS_REPO_SLUG}:${TRAVIS_COMMIT}
+
+
+script:
+  - curl 127.0.0.1:8000
